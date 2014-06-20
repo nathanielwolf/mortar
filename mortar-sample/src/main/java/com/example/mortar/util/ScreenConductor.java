@@ -61,8 +61,6 @@ public class ScreenConductor<S extends Blueprint> implements CanShowScreen<S> {
         // If it's already showing, short circuit.
         return;
       }
-
-      myScope.destroyChild(oldChildScope);
     }
 
     // Create the new child.
@@ -72,7 +70,10 @@ public class ScreenConductor<S extends Blueprint> implements CanShowScreen<S> {
     setAnimation(direction, oldChild, newChild);
 
     // Out with the old, in with the new.
-    if (oldChild != null) container.removeView(oldChild);
+    if (oldChild != null) {
+      myScope.destroyChild(Mortar.getScope(oldChild.getContext()));
+      container.removeView(oldChild);
+    }
     container.addView(newChild);
   }
 
